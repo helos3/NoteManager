@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="test.notemanager.NotesActivity">
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/share_socials"
+        android:icon="@drawable/abc_ab_share_pack_mtrl_alpha"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/menu_save"
+        android:title="@string/save"
+        android:icon="@drawable/abc_btn_borderless_material"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_edit"
+        android:title="@string/edit"
+        android:icon="@drawable/abc_btn_check_material"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_update_photo"
+        android:title="@string/update_photo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_rename_head"
+        android:title="@string/rename_head"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_choose_priority"
+        android:title="@string/choose_priority"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_insert_gps"
+        android:title="@string/choose_gps"
+        app:showAsAction="never" />
+
+
+</menu>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:id="@+id/item_note_container">
+
+
+        <ImageView
+            android:id="@+id/item_note_icon"
+            style="@style/IconImages"
+            android:src="@android:drawable/btn_star" />
+
+        <TextView
+            android:id="@+id/item_note_head"
+            style="@style/PrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@id/item_note_icon"
+            android:layout_toRightOf="@id/item_note_icon"
+            android:text="userName" />
+
+        <TextView
+            android:id="@+id/item_note_content"
+            style="@style/SecondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_below="@+id/item_note_head"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/item_note_icon"
+            android:layout_toRightOf="@id/item_note_icon"
+            android:text="addLeft" />
+
+        <ImageView
+            android:id="@+id/item_note_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/importance_red"
+            style="@style/IconImages"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

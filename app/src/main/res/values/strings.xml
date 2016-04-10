@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">NoteManager</string>
+    <string name="action_settings">Настройки</string>
+    <string name="share_socials">Поделиться</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+    <string name="update_photo">Обновить фото</string>
+    <string name="choose_priority">Выбрать приоритет</string>
+    <string name="choose_gps">Вставить GPS-координаты</string>
+    <string name="rename_head">Переименовать</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
