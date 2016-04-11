@@ -42,10 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/importance_red"
-            style="@style/IconImages"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_toRightOf="@id/item_note_head"
+            android:layout_toEndOf="@id/item_note_head"
+            android:layout_marginTop="8dp"/>
 
     </RelativeLayout>
 

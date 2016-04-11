@@ -46,7 +46,7 @@ public class NotesHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public int updateNote(Note note) {
+    private void updateNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -56,13 +56,19 @@ public class NotesHelper extends SQLiteOpenHelper {
         if (note.getPhoto() != null)
             values.put(NOTE_COLUMN_IMAGE, BitmapUtils.getBytes(note.getPhoto()));
 
-        return db.update(NOTE_TABLE_NAME, values, NOTE_COLUMN_ID + " = ?",
+        db.update(NOTE_TABLE_NAME, values, NOTE_COLUMN_ID + " = ?",
                 new String[]{String.valueOf(note.getId())});
+        db.close();
     }
 
-    public void insertNote(Note note) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public Note saveNote(Note note) {
+        if (note.getId() == null) note.setId(insertNote(note));
+        else updateNote(note);
+        return note;
+    }
 
+    private int insertNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NOTE_COLUMN_HEAD, note.getHead());
         values.put(NOTE_COLUMN_CONTENT, note.getContent());
@@ -70,8 +76,9 @@ public class NotesHelper extends SQLiteOpenHelper {
         if (note.getPhoto() != null)
             values.put(NOTE_COLUMN_IMAGE, BitmapUtils.getBytes(note.getPhoto()));
 
-        db.insert(NOTE_TABLE_NAME, null, values);
+        int id = (int) db.insert(NOTE_TABLE_NAME, null, values);
         db.close();
+        return id;
     }
 
     public void deleteNote(Note note) {

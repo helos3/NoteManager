@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
-
+    android:fitsSystemWindows="true"
+    tools:context="test.notemanager.ActivityProperties">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appbar">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -22,18 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <RelativeLayout
-        android:name="test.notemanager.fragments.FragmentNotes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_container"
-        android:padding="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
-
-    </RelativeLayout>
-
+    <include layout="@layout/content_activity_properties" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

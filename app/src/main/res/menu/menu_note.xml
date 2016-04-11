@@ -6,38 +6,40 @@
     <item
         android:id="@+id/menu_share"
         android:title="@string/share_socials"
-        android:icon="@drawable/abc_ab_share_pack_mtrl_alpha"
+        android:icon="@drawable/menu_social_share"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menu_save"
         android:title="@string/save"
-        android:icon="@drawable/abc_btn_borderless_material"
+        android:icon="@drawable/menu_save_note"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_props"
+        android:title="@string/properties"
+        android:icon="@drawable/menu_properties"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/menu_edit"
         android:title="@string/edit"
-        android:icon="@drawable/abc_btn_check_material"
+        android:icon="@drawable/menu_edit_note"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_file"
+        android:title="@string/import_as_file"
+        app:showAsAction="never" />
+
+
     <item
         android:id="@+id/menu_delete"
         android:title="@string/delete"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_update_photo"
-        android:title="@string/update_photo"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_rename_head"
         android:title="@string/rename_head"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_choose_priority"
-        android:title="@string/choose_priority"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_insert_gps"
-        android:title="@string/choose_gps"
         app:showAsAction="never" />
 
 

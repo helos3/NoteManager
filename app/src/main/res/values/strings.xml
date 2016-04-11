@@ -9,7 +9,13 @@
     <string name="choose_priority">Выбрать приоритет</string>
     <string name="choose_gps">Вставить GPS-координаты</string>
     <string name="rename_head">Переименовать</string>
+    <string name="properties">Свойства</string>
+    <string name="back">Назад</string>
+    <string name="import_as_file">Импортировать в файл</string>
+    <string name="head">Заголовок</string>
+    <string name="create_note">Создать заметку</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_activity_properties">Свойства</string>
 </resources>

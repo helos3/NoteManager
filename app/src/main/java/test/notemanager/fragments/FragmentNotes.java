@@ -21,7 +21,7 @@ public class FragmentNotes extends Fragment {
     OnNoteTouchListener mCallback;
 
     public interface OnNoteTouchListener {
-        void onItemSelected(Note note);
+        void onItemSelected(Note note, boolean newNote);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class FragmentNotes extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerViewItemListener(getActivity(), recyclerView, new RecyclerViewItemListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                mCallback.onItemSelected(((NotesCursorAdapter) recyclerView.getAdapter()).getNote(position));
+                mCallback.onItemSelected(((NotesCursorAdapter) recyclerView.getAdapter()).getNote(position), false);
             }
 
             @Override

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,17 +14,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/alert_light_frame" />
-
             <ViewSwitcher
                 android:id="@+id/content_switcher"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:padding="4dp"
+                    android:layout_marginTop="5dp"
                     android:id="@+id/content_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -39,9 +36,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textMultiLine"
-                    android:lineSpacingMultiplier="1.3"
+                    android:lineSpacingMultiplier="1.28"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
+                    android:minLines="20"
+                    android:gravity="top"
+                    android:background="@android:color/transparent"
                     />
 
 
@@ -51,6 +51,8 @@
 
 
     </ScrollView>
+
+
 
 
 </LinearLayout>

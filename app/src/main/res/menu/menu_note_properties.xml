@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_back"
+        android:title="@string/back"
+        android:icon="@drawable/menu_navigation_back"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_save_props"
+        android:title="@string/save"
+        android:icon="@drawable/menu_save_note"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_update_photo"
+        android:title="@string/update_photo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_rename_head"
+        android:title="@string/rename_head"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_choose_priority"
+        android:title="@string/choose_priority"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_insert_gps"
+        android:title="@string/choose_gps"
+        app:showAsAction="never" />
+
+</menu>
