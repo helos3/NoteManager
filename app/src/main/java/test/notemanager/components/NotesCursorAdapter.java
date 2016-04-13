@@ -2,7 +2,7 @@ package test.notemanager.components;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +39,10 @@ public class NotesCursorAdapter extends CursorRecyclerViewAdapterAdapter<NotesCu
     public void onBindViewHolder(NoteViewHolder viewHolder, Cursor cursor) {
         Note note = Note.fromCursor(cursor);
         viewHolder.mHead.setText(note.getHead());
-        if (note.getPhoto() != null) {
-            viewHolder.mIcon.setImageBitmap(
-                    Bitmap.createScaledBitmap(note.getPhoto(), 56, 56, true));
+        if (note.getImageUri() != null) {
+            try {
+                viewHolder.mIcon.setImageBitmap(MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), note.getImageUri()));
+            } catch (Exception e) {e.printStackTrace();}
         }
         viewHolder.mContent.setText(StringUtils.createBriefContent(note.getContent()));
         viewHolder.mHead.setText(note.getHead());

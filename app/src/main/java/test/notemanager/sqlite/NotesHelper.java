@@ -7,23 +7,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import test.notemanager.models.Note;
-import test.notemanager.utils.BitmapUtils;
 
 public class NotesHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Notes.db";
     public static final String NOTE_TABLE_NAME = "note";
-    public static final String NOTE_COLUMN_ID = "_id";
-    public static final int NOTE_COLUMN_ID_NUMBER = 0;
-    public static final String NOTE_COLUMN_HEAD = "head";
-    public static final int NOTE_COLUMN_HEAD_NUMBER = 1;
-    public static final String NOTE_COLUMN_CONTENT = "content";
-    public static final int NOTE_COLUMN_CONTENT_NUMBER = 2;
-    public static final String NOTE_COLUMN_PRIORITY = "priority";
-    public static final int NOTE_COLUMN_PRIORITY_NUMBER = 3;
-    public static final String NOTE_COLUMN_IMAGE = "photo";
-    public static final int NOTE_COLUMN_IMAGE_NUMBER = 4;
+    public static final String NOTE_COLUMN_ID = "_id";              //col 0
+    public static final String NOTE_COLUMN_HEAD = "head";           //col 1
+    public static final String NOTE_COLUMN_CONTENT = "content";     //col 2
+    public static final String NOTE_COLUMN_IMAGE = "photo";         //col 3
+    public static final String NOTE_COLUMN_PRIORITY = "priority";   //col 4
+    public static final String NOTE_COLUMN_LATITUDE = "latitude";   //col 5
+    public static final String NOTE_COLUMN_LONGITUDE = "longitude"; //col 6
 
     public NotesHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,14 +32,23 @@ public class NotesHelper extends SQLiteOpenHelper {
                 NOTE_COLUMN_ID + " integer primary key autoincrement, " +
                 NOTE_COLUMN_HEAD + " text , " +
                 NOTE_COLUMN_CONTENT + " text,  " +
-                NOTE_COLUMN_IMAGE + " blob,  " +
-                NOTE_COLUMN_PRIORITY + " text)");
+                NOTE_COLUMN_IMAGE + " text,  " +
+                NOTE_COLUMN_PRIORITY + " text," +
+                NOTE_COLUMN_LATITUDE + " real," +
+                NOTE_COLUMN_LONGITUDE + " real)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + NOTE_TABLE_NAME);
         onCreate(db);
+    }
+
+    private void updateNoteImageUriNull(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        if (note.getImageUri() != null)
+            values.put(NOTE_COLUMN_IMAGE, note.getImageUri().toString());
     }
 
     private void updateNote(Note note) {
@@ -53,11 +58,14 @@ public class NotesHelper extends SQLiteOpenHelper {
         values.put(NOTE_COLUMN_HEAD, note.getHead());
         values.put(NOTE_COLUMN_CONTENT, note.getContent());
         values.put(NOTE_COLUMN_PRIORITY, note.getPriority().toString());
-        if (note.getPhoto() != null)
-            values.put(NOTE_COLUMN_IMAGE, BitmapUtils.getBytes(note.getPhoto()));
-
-        db.update(NOTE_TABLE_NAME, values, NOTE_COLUMN_ID + " = ?",
-                new String[]{String.valueOf(note.getId())});
+        if (note.getImageUri() != null)
+            values.put(NOTE_COLUMN_IMAGE, note.getImageUri().toString());
+        if (note.getLocation() != null) {
+            values.put(NOTE_COLUMN_LATITUDE, note.getLocation().latitude);
+            values.put(NOTE_COLUMN_LONGITUDE, note.getLocation().longitude);
+        }
+            db.update(NOTE_TABLE_NAME, values, NOTE_COLUMN_ID + " = ?",
+                    new String[]{String.valueOf(note.getId())});
         db.close();
     }
 
@@ -73,8 +81,12 @@ public class NotesHelper extends SQLiteOpenHelper {
         values.put(NOTE_COLUMN_HEAD, note.getHead());
         values.put(NOTE_COLUMN_CONTENT, note.getContent());
         values.put(NOTE_COLUMN_PRIORITY, note.getPriority().toString());
-        if (note.getPhoto() != null)
-            values.put(NOTE_COLUMN_IMAGE, BitmapUtils.getBytes(note.getPhoto()));
+        if (note.getImageUri() != null)
+            values.put(NOTE_COLUMN_IMAGE, note.getImageUri().toString());
+        if (note.getLocation() != null) {
+            values.put(NOTE_COLUMN_LATITUDE, note.getLocation().latitude);
+            values.put(NOTE_COLUMN_LONGITUDE, note.getLocation().longitude);
+        }
 
         int id = (int) db.insert(NOTE_TABLE_NAME, null, values);
         db.close();

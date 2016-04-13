@@ -3,6 +3,7 @@ package test.notemanager.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import test.notemanager.ActivityProperties;
 import test.notemanager.R;
 import test.notemanager.models.Note;
 import test.notemanager.sqlite.NotesHelper;
@@ -37,10 +39,6 @@ public class FragmentNote extends Fragment {
     private TextView contentTextView;
     private EditText contentEditText;
 
-
-    public void setNote(Note mNote) {
-        this.mNote = mNote;
-    }
 
     public FragmentNote() {
     }
@@ -227,13 +225,21 @@ public class FragmentNote extends Fragment {
     }
 
     private void propsOption() {
+        Intent intent = new Intent(getActivity(), ActivityProperties.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("mNote", mNote);
+        intent.putExtras(extras);
+        startActivity(intent);
 
+        // Following the documentation, right after starting the activity
+        // we override the transition
+        getActivity().overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
     private void importToFile() {
 
         File root = new File(Environment.getExternalStorageDirectory() + File.separator +
-                            Environment.DIRECTORY_DCIM + File.separator + "NoteManager", "Notes");
+                Environment.DIRECTORY_DCIM + File.separator + "NoteManager", "Notes");
         if (!root.exists()) {
             root.mkdirs();
         }

@@ -18,16 +18,12 @@
         android:title="@string/update_photo"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_rename_head"
+        android:id="@+id/menu_rename_head_props"
         android:title="@string/rename_head"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_choose_priority"
         android:title="@string/choose_priority"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_insert_gps"
-        android:title="@string/choose_gps"
         app:showAsAction="never" />
 
 </menu>

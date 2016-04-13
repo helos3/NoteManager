@@ -21,14 +21,95 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_activity_properties" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/main_scrollview">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/properties_container"
+            android:padding="16dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/priority_description"
+                android:text="@string/priority"
+                style="@style/PropsText"
+                />
+
+            <ImageView
+                android:id="@+id/priority_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/importance_red"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photo"
+                android:id="@+id/photo_description"
+                style="@style/PropsText"
+                android:layout_below="@id/priority_description"
+                android:layout_marginTop="24dp"
+                />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:id="@+id/photo_image"
+                android:layout_below="@id/photo_description"
+                android:layout_marginTop="8dp"
+                android:src="@android:drawable/ic_menu_preferences"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/google_map"
+                android:id="@+id/google_map_description"
+                style="@style/PropsText"
+                android:layout_below="@id/photo_image"
+                android:layout_marginTop="24dp"
+                />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_below="@id/google_map_description">
+
+                <fragment
+                    android:id="@+id/google_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="8dp"
+                    class="com.google.android.gms.maps.SupportMapFragment"/>
+
+                <ImageView
+                    android:id="@+id/transparent_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@android:color/transparent" />
+
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>
