@@ -28,6 +28,8 @@ public abstract class CursorRecyclerViewAdapterAdapter<VH extends RecyclerView.V
     }
 
 
+
+
     protected Cursor getItem(int position) {
         if (mDataValid && mCursor != null) {
             mCursor.moveToPosition(position);
@@ -50,12 +52,6 @@ public abstract class CursorRecyclerViewAdapterAdapter<VH extends RecyclerView.V
         super.setHasStableIds(true);
     }
 
-    public void changeCursor(Cursor cursor) {
-        Cursor old = swapCursor(cursor);
-        if (old != null) {
-            old.close();
-        }
-    }
 
     public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == mCursor) {

@@ -8,28 +8,31 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 
 public class Note implements Serializable {
-    Integer id;
-    String head;
-    String content;
-    Priority priority;
-    Uri imageUri;
-    LatLng location;
+    private Integer id;
+    private String head;
+    private String content;
+    private Priority priority;
+    private String imageUri;
+    private double latitude, longitude;
 
     public void setImageUri(Uri imageUri) {
-        this.imageUri = imageUri;
+        this.imageUri = imageUri.getPath();
     }
 
     public void setLocation(LatLng location) {
-        this.location = location;
+        latitude = location.latitude;
+        longitude = location.longitude;
+
     }
 
     public Uri getImageUri() {
-
-        return imageUri;
+        if (imageUri != null)
+            return Uri.parse("file://" + imageUri);
+        else return null;
     }
 
     public LatLng getLocation() {
-        return location;
+        return new LatLng(latitude, longitude);
     }
 
     public static Note fromCursor(Cursor cursor) {
@@ -42,16 +45,10 @@ public class Note implements Serializable {
             Uri imageUri = Uri.parse(cursor.getString(3));
             note.setImageUri(imageUri);
         }
-        if (cursor.isNull(5)) {
+        if (cursor.getDouble(5) != 0.0) {
             LatLng location = new LatLng(cursor.getDouble(5), cursor.getDouble(6));
+            note.setLocation(location);
         }
-
-
-//        if (cursor.getBlob(3) != null) {
-//            Bitmap photo = BitmapUtils.getImage(cursor.getBlob(3));
-//            note = new Note(head, content, photo, priority);
-//        }
-        note = new Note(head, content, priority);
         note.setId(cursor.getInt(0));
         return note;
     }
@@ -108,4 +105,6 @@ public class Note implements Serializable {
     public Priority getPriority() {
         return priority;
     }
+
+
 }

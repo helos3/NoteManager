@@ -19,9 +19,15 @@ import test.notemanager.sqlite.NotesHelper;
 public class FragmentNotes extends Fragment {
 
     OnNoteTouchListener mCallback;
+    NotesCursorAdapter mAdapter;
+    NotesHelper mHelper;
 
     public interface OnNoteTouchListener {
         void onItemSelected(Note note, boolean newNote);
+    }
+
+    private void updateDataSet() {
+        mAdapter.swapCursor(mHelper.selectAllNotes());
     }
 
     @Override
@@ -42,6 +48,12 @@ public class FragmentNotes extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        updateDataSet();
+        super.onResume();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -52,10 +64,11 @@ public class FragmentNotes extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.note_list);
-        NotesHelper db = new NotesHelper(getActivity());
+        mHelper = new NotesHelper(getActivity());
         Context context = rootView.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new NotesCursorAdapter(context, db.selectAllNotes()));
+        mAdapter = new NotesCursorAdapter(context, mHelper.selectAllNotes());
+        recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(new RecyclerViewItemListener(getActivity(), recyclerView, new RecyclerViewItemListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

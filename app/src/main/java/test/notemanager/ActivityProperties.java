@@ -1,5 +1,6 @@
 package test.notemanager;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -12,15 +13,17 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -32,7 +35,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
@@ -48,18 +50,25 @@ public class ActivityProperties extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+
     @Override
     public void onConnected(Bundle bundle) {
+        if (mNote.getLocation() != null) {
+            mCurrentLocation = new Location("Current location");
+            mCurrentLocation.setLatitude(mNote.getLocation().latitude);
+            mCurrentLocation.setLongitude(mNote.getLocation().longitude);
+        }
         if (mCurrentLocation == null)
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
         if (mCurrentLocation != null) {
+            googleMap.clear();
             googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
                     .draggable(true));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
-                    new LatLng(mCurrentLocation.getLatitude() - 0.05, mCurrentLocation.getLongitude() - 0.05),
-                    new LatLng(mCurrentLocation.getLatitude() + 0.05, mCurrentLocation.getLongitude() + 0.05)), 6));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 15f));
+
         }
     }
 
@@ -95,6 +104,7 @@ public class ActivityProperties extends AppCompatActivity implements
 
     @Override
     protected void onStart() {
+        Log.d("logs", "googleapi connected");
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -112,6 +122,8 @@ public class ActivityProperties extends AppCompatActivity implements
     private NotesHelper mHelper;
     private ImageView mPriorityImage;
     private ImageView mPhotoImage;
+    private CheckBox mPhotoCheck;
+    private CheckBox mGPSCheck;
     private int PICK_IMAGE_REQUEST = 1;
     private int TAKE_PHOTO_REQUEST = 0;
 
@@ -141,15 +153,14 @@ public class ActivityProperties extends AppCompatActivity implements
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PHOTO_REQUEST) {
                 try {
+//                    Bitmap b = Picasso.with(this).load(imageUri).get();
                     mPhotoImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                mNote.setImageUri(imageUri);
             } else if (requestCode == PICK_IMAGE_REQUEST) {
                 Uri selectedImage = data.getData();
-                mNote.setImageUri(selectedImage);
                 imageUri = selectedImage;
                 try {
                     mPhotoImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri));
@@ -165,8 +176,7 @@ public class ActivityProperties extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+        backOption();
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -182,11 +192,8 @@ public class ActivityProperties extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mHelper = new NotesHelper(this);
         mNote = (Note) getIntent().getExtras().getSerializable("mNote");
-        if (!isGooglePlayServicesAvailable()) {
-            Toast.makeText(this, "sohsee hoooy", Toast.LENGTH_LONG).show();
-        }
-//
         setContentView(R.layout.activity_properties);
 
         final ScrollView mainScrollView = (ScrollView) findViewById(R.id.main_scrollview);
@@ -222,12 +229,11 @@ public class ActivityProperties extends AppCompatActivity implements
                 .build();
 
 
-        SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
+        final SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
         fm.getMapAsync(new OnMapReadyCallback() {
             public void onMapReady(GoogleMap map) {
-                if (map == null) {
-                } else {
+                if (map != null) {
                     googleMap = map;
                     googleMap.getUiSettings().setCompassEnabled(true);
                     googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -245,38 +251,64 @@ public class ActivityProperties extends AppCompatActivity implements
                             googleMap.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .draggable(true));
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    latLng, 15f));
+
                         }
                     });
-                    if (mNote.getLocation() != null) {
-                        mCurrentLocation = new Location("Current location");
-                        mCurrentLocation.setLatitude(mNote.getLocation().latitude);
-                        mCurrentLocation.setLongitude(mNote.getLocation().longitude);
-                    }
-                    if (mCurrentLocation == null)
-                        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
-                                mGoogleApiClient);
-                    if (mCurrentLocation != null) {
-                        googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-                                .draggable(true));
-                    }
                 }
             }
         });
         mPriorityImage = (ImageView) findViewById(R.id.priority_image);
         mPhotoImage = (ImageView) findViewById(R.id.photo_image);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mPhotoCheck = (CheckBox) findViewById(R.id.photo_description);
+        mGPSCheck = (CheckBox) findViewById(R.id.google_map_description);
+        setTitle(mNote.getHead().toString());
 
-        mPriorityImage.setImageResource(Priorities.getEnumInstance().get(mNote.getPriority()));
-        if (mNote.getImageUri() != null) {
+        if (mNote.getImageUri() == null) {
+            mPhotoImage.setVisibility(View.GONE);
+            mPhotoCheck.setChecked(false);
+        } else {
+            mPhotoImage.setVisibility(View.VISIBLE);
+            mPhotoCheck.setChecked(true);
+            imageUri = mNote.getImageUri();
             try {
+
                 mPhotoImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), mNote.getImageUri()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
+
+        if (mNote.getLocation() == null) {
+            mGPSCheck.setChecked(false);
+            fm.getView().setVisibility(View.GONE);
+        } else {
+            mGPSCheck.setChecked(true);
+            fm.getView().setVisibility(View.VISIBLE);
+
+        }
+        mPhotoCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) mPhotoImage.setVisibility(View.VISIBLE);
+                else mPhotoImage.setVisibility(View.GONE);
+            }
+        });
+
+        mGPSCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) fm.getView().setVisibility(View.VISIBLE);
+                else fm.getView().setVisibility(View.GONE);
+            }
+        });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        mPriorityImage.setImageResource(Priorities.getEnumInstance().get(mNote.getPriority()));
 
 
         mPhotoImage.setOnClickListener(new View.OnClickListener() {
@@ -289,8 +321,8 @@ public class ActivityProperties extends AppCompatActivity implements
                     startActivity(intent);
                 }
             }
-        });
 
+        });
         mPhotoImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -319,7 +351,8 @@ public class ActivityProperties extends AppCompatActivity implements
                 savePropsOption();
                 break;
             case R.id.menu_update_photo:
-                updatePhotoOption();
+                if (mPhotoCheck.isChecked())
+                    updatePhotoOption();
                 break;
             case R.id.menu_rename_head_props:
                 renameHeadOption();
@@ -335,7 +368,7 @@ public class ActivityProperties extends AppCompatActivity implements
     }
 
     private void updatePhotoOption() {
-        final CharSequence[] items = {"Сделать снимок", "Выбрать из галереи",
+        final CharSequence[] items = {"Сделать снимок",/* "Выбрать из галереи",*/
                 "Отмена"};
 
 
@@ -359,11 +392,11 @@ public class ActivityProperties extends AppCompatActivity implements
                             startActivityForResult(takePictureIntent, TAKE_PHOTO_REQUEST);
                         }
                     }
-                } else if (items[item].equals("Выбрать из галереи")) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+//                } else if (items[item].equals("Выбрать из галереи")) {
+//                    Intent intent = new Intent();
+//                    intent.setType("image/*");
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
                 } else if (items[item].equals("Отмена")) {
                     dialog.dismiss();
                 }
@@ -420,12 +453,20 @@ public class ActivityProperties extends AppCompatActivity implements
 
 
     private void savePropsOption() {
+        mNote.setHead(getTitle().toString());
+        mNote.setLocation(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+        if (imageUri != null)
+            mNote.setImageUri(imageUri);
         mNote = mHelper.saveNote(mNote);
-
     }
 
 
     private void backOption() {
+        Intent result = new Intent();
+        Bundle resultData = new Bundle();
+        resultData.putSerializable("mNote", mNote);
+        result.putExtras(resultData);
+        setResult(Activity.RESULT_OK, result);
         finish();
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }

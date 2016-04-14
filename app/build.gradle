@@ -28,4 +28,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.google.maps.android:android-maps-utils:0.3+'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.vk:androidsdk:+'
 }

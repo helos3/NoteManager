@@ -31,6 +31,7 @@ import test.notemanager.sqlite.NotesHelper;
 
 public class FragmentNote extends Fragment {
 
+
     private Note mNote;
     private NotesHelper mHelper;
     private ViewSwitcher viewSwitcher;
@@ -39,6 +40,16 @@ public class FragmentNote extends Fragment {
     private TextView contentTextView;
     private EditText contentEditText;
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 0) {
+                mNote = (Note) data.getExtras().getSerializable("mNote");
+                getActivity().setTitle(mNote.getHead());
+            }
+        }
+    }
 
     public FragmentNote() {
     }
@@ -102,7 +113,7 @@ public class FragmentNote extends Fragment {
     public void onAttach(Activity activity) {
         Log.d("logs", getClass().getSimpleName() + "onAttach()");
         mNote = (Note) getArguments().getSerializable("mNote");
-        isNewNote = (boolean) getArguments().getBoolean("newNote");
+        isNewNote = getArguments().getBoolean("newNote");
         super.onAttach(activity);
         if (activity instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) activity;
@@ -203,6 +214,8 @@ public class FragmentNote extends Fragment {
         viewSwitcher.showNext();
     }
 
+
+
     private void renameHeadOption() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -229,10 +242,7 @@ public class FragmentNote extends Fragment {
         Bundle extras = new Bundle();
         extras.putSerializable("mNote", mNote);
         intent.putExtras(extras);
-        startActivity(intent);
-
-        // Following the documentation, right after starting the activity
-        // we override the transition
+        startActivityForResult(intent, 0);
         getActivity().overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
