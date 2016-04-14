@@ -32,7 +32,9 @@ public class Note implements Serializable {
     }
 
     public LatLng getLocation() {
-        return new LatLng(latitude, longitude);
+        if (latitude != 0.0)
+            return new LatLng(latitude, longitude);
+        else return null;
     }
 
     public static Note fromCursor(Cursor cursor) {

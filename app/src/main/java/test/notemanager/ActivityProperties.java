@@ -58,9 +58,19 @@ public class ActivityProperties extends AppCompatActivity implements
             mCurrentLocation.setLatitude(mNote.getLocation().latitude);
             mCurrentLocation.setLongitude(mNote.getLocation().longitude);
         }
-        if (mCurrentLocation == null)
+        if (mCurrentLocation == null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
+//            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//            Criteria criteria = new Criteria();
+//            String provider = locationManager.getBestProvider(criteria, true);
+//            Location location = locationManager.getLastKnownLocation(provider);
+//            if (location != null) {
+//                mCurrentLocation = new Location("current_location");
+//                mCurrentLocation.setLatitude(location.getLatitude());
+//                mCurrentLocation.setLongitude(location.getLongitude());
+//            }
+        }
         if (mCurrentLocation != null) {
             googleMap.clear();
             googleMap.addMarker(new MarkerOptions()
